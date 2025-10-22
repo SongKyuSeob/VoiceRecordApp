@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RecordingView: View {
     @ObservedObject var viewModel: RecordingViewModel
+    @State private var isPopupVisible: Bool = false
     @State private var selectedIndex = 0
     private let options = ["녹음", "라이브러리"]
     
@@ -50,16 +51,33 @@ struct RecordingView: View {
                 Spacer()
                     .frame(height: 32)
                 
-                RecorderBoxView(viewModel: viewModel)
-                    .background(.white)
-                    .cornerRadius(20)
-                    .overlay (
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.gray.opacity(0.3), lineWidth: 0.5)
-                    )
-                    .padding(.horizontal, 24)
+                if selectedIndex == 0 {
+                    RecorderBoxView(viewModel: viewModel, isPopupVisible: $isPopupVisible)
+                        .background(.white)
+                        .cornerRadius(20)
+                        .overlay (
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.gray.opacity(0.3), lineWidth: 0.5)
+                        )
+                        .padding(.horizontal, 24)
+                } else {
+                    LibraryView(viewModel: viewModel)
+                        .background(.white)
+                        .cornerRadius(20)
+                        .overlay (
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.gray.opacity(0.3),
+                                        lineWidth: 0.5)
+                        )
+                        .padding(.horizontal, 24)
+                }
+                
                 
                 Spacer()
+            }
+            
+            if isPopupVisible {
+                PopupInputView(isVisible: $isPopupVisible, viewModel: viewModel)
             }
         }
     }

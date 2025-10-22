@@ -9,11 +9,12 @@ import SwiftUI
 
 struct RecorderBoxView: View {
     @ObservedObject var viewModel: RecordingViewModel
+    @Binding var isPopupVisible: Bool
     
     var body: some View {
         HStack {
             VStack {
-                Text("0:00")
+                Text(viewModel.recordingTime)
                     .font(.system(size: 36))
                     .foregroundStyle(.black)
                     .padding(.top, 24)
@@ -23,6 +24,9 @@ struct RecorderBoxView: View {
                 
                 Button {
                     print("녹음 버튼 탭")
+                    if viewModel.isRecording {
+                        isPopupVisible.toggle()
+                    }
                     viewModel.handleRecordingEvent()
                 } label: {
                     Image(systemName: viewModel.isRecording ? "stop.fill" : "microphone")
